@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import Login from "./Login";
 
 function Registration() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -17,7 +16,7 @@ function Registration() {
         email,
         password,
       });
-      console.log(responce.data.message);
+      console.log(responce.data);
       if (responce.data.success) {
         navigate("/login");
       }
