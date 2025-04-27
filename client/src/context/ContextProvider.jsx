@@ -9,6 +9,10 @@ function ContextProvider({ children }) {
   const login = (user) => {
     setUser(user);
   };
+  function logout() {
+    localStorage.removeItem("token");
+    setUser(null);
+  }
   async function verifyUser() {
     try {
       const responce = await axios.get(`${API_URL}/auth/verify`, {
@@ -28,7 +32,7 @@ function ContextProvider({ children }) {
     verifyUser();
   }, []);
   return (
-    <authContext.Provider value={{ user, login, loading }}>
+    <authContext.Provider value={{ user, login, loading, logout }}>
       {children}
     </authContext.Provider>
   );
