@@ -1,9 +1,10 @@
 import React from "react";
 import icon from "../assets/searchi.png";
 
-function Search({ setCity, city }) {
+function Search({ setCity, city, findCity }) {
   function handleSubmit(e) {
     e.preventDefault();
+    findCity();
   }
   return (
     <div className="mt-7">
