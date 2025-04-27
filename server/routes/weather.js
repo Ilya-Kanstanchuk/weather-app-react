@@ -24,7 +24,11 @@ router.get("/find", cityMiddleware, async (req, res) => {
     }
     return res
       .status(200)
-      .json({ success: true, forecast: weatherResponce.data.daily });
+      .json({
+        success: true,
+        forecast: weatherResponce.data.daily,
+        currentCity: req.query.city,
+      });
   } catch (error) {
     console.log(error);
   }

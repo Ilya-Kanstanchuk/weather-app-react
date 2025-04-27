@@ -4,10 +4,12 @@ import Search from "../components/Search";
 import Saved from "../components/Saved";
 import Sidemenu from "../components/Sidemenu";
 import axios from "axios";
+import ForecastPanel from "../components/ForecastPanel";
 function Home() {
   const [isSearch, setIsSearch] = useState(true);
   const [city, setCity] = useState("");
-  const [weather, setWeather] = useState([]);
+  const [currentCity, setCurrentCity] = useState("");
+  const [weather, setWeather] = useState(null);
   const API_URL = import.meta.env.VITE_API_URL;
 
   async function findCity() {
@@ -18,6 +20,7 @@ function Home() {
       console.log(responce.data);
       if (responce.data.success) {
         setWeather(responce.data.forecast);
+        setCurrentCity(responce.data.currentCity);
       }
     } catch (error) {
       console.log(error);
@@ -32,9 +35,10 @@ function Home() {
           <Sidemenu setIsSearch={setIsSearch} isSearch={isSearch} />
           <div className="flex justify-center">
             {isSearch ? (
-              <>
+              <div className="flex flex-col items-center">
                 <Search setCity={setCity} city={city} findCity={findCity} />
-              </>
+                <ForecastPanel weather={weather} currentCity={currentCity} />
+              </div>
             ) : (
               <Saved />
             )}
