@@ -1,6 +1,6 @@
 import React from "react";
 
-function ForecastPanel({ weather, currentCity }) {
+function ForecastPanel({ weather, currentCity, addToSaved, isSaved }) {
   console.log(weather);
   function getWeatherDescription(code) {
     const weatherCodes = {
@@ -123,6 +123,20 @@ function ForecastPanel({ weather, currentCity }) {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="flex items-center justify-center mt-6">
+            {isSaved ? (
+              <button className="px-8 py-2 bg-removeloc rounded-2xl cursor-pointer">
+                Remove location
+              </button>
+            ) : (
+              <button
+                onClick={() => addToSaved()}
+                className="px-8 py-2 bg-searchb rounded-2xl cursor-pointer"
+              >
+                Save location
+              </button>
+            )}
           </div>
         </div>
       ) : (
