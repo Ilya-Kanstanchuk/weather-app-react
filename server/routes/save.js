@@ -40,4 +40,20 @@ router.get("/check", async (req, res) => {
   }
 });
 
+router.delete("/delete", async (req, res) => {
+  try {
+    const city = await Location.findOneAndDelete({
+      city: req.query.currentCity,
+    });
+    if (!city) {
+      return res
+        .status(401)
+        .json({ success: false, message: "City wasn't delete" });
+    }
+    return res.status(200).json({ success: true, message: "City was deleted" });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Error" });
+  }
+});
+
 export default router;

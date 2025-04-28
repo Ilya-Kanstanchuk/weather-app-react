@@ -45,6 +45,21 @@ function Home() {
       console.log(error);
     }
   }
+
+  async function deleteFromSaved() {
+    try {
+      const responce = await axios.delete(`${API_URL}/city/delete`, {
+        params: { currentCity },
+      });
+      console.log(responce.data);
+      if (responce.data.success) {
+        setIsSaved(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function checkIfSaved() {
     try {
       const responce = await axios.get(`${API_URL}/city/check`, {
@@ -80,6 +95,7 @@ function Home() {
                   currentCity={currentCity}
                   addToSaved={addToSaved}
                   isSaved={isSaved}
+                  deleteFromSaved={deleteFromSaved}
                 />
               </div>
             ) : (
