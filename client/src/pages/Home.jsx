@@ -14,6 +14,7 @@ function Home() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { user } = useAuth();
   const [isSaved, setIsSaved] = useState(false);
+  const [savedCities, setSavedCities] = useState([]);
 
   async function findCity() {
     try {
@@ -40,6 +41,7 @@ function Home() {
       console.log(responce.data);
       if (responce.data.success) {
         setIsSaved(true);
+        fetchSavedCities();
       }
     } catch (error) {
       console.log(error);
@@ -54,6 +56,7 @@ function Home() {
       console.log(responce.data);
       if (responce.data.success) {
         setIsSaved(false);
+        fetchSavedCities();
       }
     } catch (error) {
       console.log(error);
@@ -61,9 +64,10 @@ function Home() {
   }
 
   async function checkIfSaved() {
+    const userId = user.id;
     try {
       const responce = await axios.get(`${API_URL}/city/check`, {
-        params: { currentCity },
+        params: { currentCity, userId },
       });
       console.log(responce.data);
       if (responce.data.success) {
@@ -74,11 +78,30 @@ function Home() {
     }
   }
 
+  async function fetchSavedCities() {
+    const userId = user.id;
+    try {
+      const responce = await axios.get(`${API_URL}/city/all`, {
+        params: { userId },
+      });
+      if (responce.data.success) {
+        setSavedCities(responce.data.cities);
+      }
+      console.log(responce.data.cities);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     if (currentCity) {
       checkIfSaved();
     }
   }, [currentCity]);
+
+  useEffect(() => {
+    fetchSavedCities();
+  }, []);
 
   return (
     <div>

@@ -28,7 +28,10 @@ router.post("/add", async (req, res) => {
 
 router.get("/check", async (req, res) => {
   try {
-    const city = await Location.findOne({ city: req.query.currentCity });
+    const city = await Location.findOne({
+      city: req.query.currentCity,
+      userId: req.query.userId,
+    });
     if (!city) {
       return res
         .status(401)
@@ -51,6 +54,20 @@ router.delete("/delete", async (req, res) => {
         .json({ success: false, message: "City wasn't delete" });
     }
     return res.status(200).json({ success: true, message: "City was deleted" });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Error" });
+  }
+});
+
+router.get("/all", async (req, res) => {
+  try {
+    const cities = await Location.find({ userId: req.query.userId });
+    if (!cities) {
+      return res
+        .status(401)
+        .json({ success: false, message: "No saved cities" });
+    }
+    return res.status(200).json({ success: true, cities });
   } catch (error) {
     return res.status(500).json({ success: false, message: "Error" });
   }
