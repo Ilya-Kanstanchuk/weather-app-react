@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/add", async (req, res) => {
   try {
     const { currentCity, user } = req.body;
-    const city = await Location.findOne({ city: currentCity });
+    const city = await Location.findOne({ city: currentCity, userId: user.id });
     if (city) {
       return res
         .status(401)
