@@ -133,7 +133,7 @@ function ForecastPanel({
           <div className="flex items-center justify-center mt-6">
             {isSaved ? (
               <button
-                onClick={() => deleteFromSaved()}
+                onClick={() => deleteFromSaved(currentCity)}
                 className="px-8 py-2 bg-removeloc rounded-2xl cursor-pointer"
               >
                 Remove location

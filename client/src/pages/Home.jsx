@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Search from "../components/Search";
-import Saved from "../components/Saved";
 import Sidemenu from "../components/Sidemenu";
 import axios from "axios";
 import ForecastPanel from "../components/ForecastPanel";
@@ -15,6 +14,7 @@ function Home() {
   const { user } = useAuth();
   const [isSaved, setIsSaved] = useState(false);
   const [savedCities, setSavedCities] = useState([]);
+  const [savedWeather, setSavedWeather] = useState([]);
 
   async function findCity() {
     try {
@@ -48,7 +48,7 @@ function Home() {
     }
   }
 
-  async function deleteFromSaved() {
+  async function deleteFromSaved(currentCity) {
     try {
       const responce = await axios.delete(`${API_URL}/city/delete`, {
         params: { currentCity },
@@ -93,6 +93,28 @@ function Home() {
     }
   }
 
+  async function fetchWeather() {
+    try {
+      const weatherData = await Promise.all(
+        savedCities.map(async (obj) => {
+          const city = obj.city;
+          const responce = await axios.get(`${API_URL}/weather/find`, {
+            params: { city },
+          });
+          if (responce.data.success) {
+            return { city: city, data: responce.data.forecast };
+          }
+          return null;
+        })
+      );
+      const filteredData = weatherData.filter((w) => w !== null);
+      setSavedWeather(filteredData);
+      console.log(filteredData);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     if (currentCity) {
       checkIfSaved();
@@ -102,6 +124,10 @@ function Home() {
   useEffect(() => {
     fetchSavedCities();
   }, []);
+
+  useEffect(() => {
+    fetchWeather();
+  }, [savedCities]);
 
   return (
     <div>
@@ -122,7 +148,21 @@ function Home() {
                 />
               </div>
             ) : (
-              <Saved />
+              <div className="mt-7 mb-10">
+                <h2 className="block text-center text-5xl font-extralight mb-3">
+                  Saved locations
+                </h2>
+                {savedWeather.map((panel) => (
+                  <ForecastPanel
+                    key={panel.city}
+                    weather={panel.data}
+                    currentCity={panel.city}
+                    addToSaved={addToSaved}
+                    isSaved={true}
+                    deleteFromSaved={deleteFromSaved}
+                  />
+                ))}
+              </div>
             )}
           </div>
         </div>
