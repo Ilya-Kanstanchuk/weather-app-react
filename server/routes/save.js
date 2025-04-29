@@ -47,6 +47,7 @@ router.delete("/delete", async (req, res) => {
   try {
     const city = await Location.findOneAndDelete({
       city: req.query.currentCity,
+      userId: req.query.userId,
     });
     if (!city) {
       return res

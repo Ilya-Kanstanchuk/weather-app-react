@@ -49,9 +49,10 @@ function Home() {
   }
 
   async function deleteFromSaved(currentCity) {
+    const userId = user.id;
     try {
       const responce = await axios.delete(`${API_URL}/city/delete`, {
-        params: { currentCity },
+        params: { currentCity, userId },
       });
       console.log(responce.data);
       if (responce.data.success) {
